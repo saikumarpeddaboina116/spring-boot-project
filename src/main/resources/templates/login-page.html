@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Login page</title>
+	<style>
+        body {
+            text-align: center;
+        }
+        form {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div style="border: solid orange;background: pink;display: inline-block;padding:200px 200px 200px 200px;margin-top: 8%">
+	<div th:if="${param.user!=null}" style="color: red">
+		Registration successful
+	</div>
+	<div th:if="${param.logout!=null}" style="color: red">
+		Logged out successfully
+	</div>
+	<div th:if="${param.error!=null}" style="color: red">
+		Logged out successfully
+	</div>
+	<h1>Login </h1>
+	<form th:action="@{/authenticateTheUser}" method="post">
+		<label for="username">Username</label>:
+		<input type="text" id="username" name="username" autofocus="autofocus" placeholder="Enter username"/> <br /><br/>
+		<label for="password">Password</label>:&nbsp;
+		<input type="password" id="password" name="password" placeholder="Enter password"/> <br /><br/>
+		<input type="submit" value="Log in" />
+	</form>
+
+	</div>
+
+</body>
+</html>

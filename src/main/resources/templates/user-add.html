@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:color="http://www.w3.org/1999/xhtml">
+<head ><h2 style="width: 600px;height: auto;margin-left: auto;margin-right: auto" align="center">Enter User Details</h2>
+    <style>
+        .error
+        {
+            color: red;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</head>
+<body>
+<form action="#" th:object="${user}" th:action="@{/user/save}" method="post">
+    <div style="width: 600px;height: auto;margin-right: auto;margin-left: auto">
+
+        <table class="table table-hover">
+            <tbody>
+            <tr>
+                <td><label>Username<span style="color: red">*</span> : </label></td>
+                <td><input type="text" minlength="4" pattern="[a-zA-Z0-9]+" size="45" required name="username" id="username" placeholder="Enter username"/>
+                    <hidden path="username"></hidden>
+                  <!---  <input type="hidden" name="username" th:value="username" />-->
+
+            </tr>
+            <tr>
+                <td><label>Password<span style="color: red">*</span> : </label></td>
+                <td><input type="password" size="45" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$" name="password" required id="password" placeholder="Password should have atleast one Cap,Small,Special,Digit"/></td>
+            </tr>
+
+            <tr>
+                <td><label>Email<span style="cp: red">*</span> :</label></td>
+                <td><input type="email" size="45" name="email" required id="email" placeholder="Enter email id"></td>
+            </tr>
+            <tr>
+                <td><label>PhoneNumber<span style="color: red">*</span>:</label></td>
+                <td><input type="tel" size="45" name="phoneNumber" pattern="^\d{10}$" id="phoneNumber" placeholder="Enter phone number with 10 digits"></td>
+            </tr>
+
+            <tr>
+                <td><input type="submit" value="submit" /></td>
+                <td>
+                    <div align="right">
+                        <button type="button" onclick="if(!(confirm('You choice will terminate the registration?'))) return false" class="btn btn-success" style="color: green;margin: 1px"><a th:href="@{/loginPage}" style="color: black;text-decoration: none;">Home</a></button></td></tr>
+            </td>
+                <td></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</form>
+</body>
+</html>

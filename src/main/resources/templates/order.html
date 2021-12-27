@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <h2 align="center">Enter order details</h2>
+</head>
+<div id="container">
+    <h3> Save Customer </h3>
+        <form action="@{/saveOrder}" modelAttribute="order" method="POST">
+            <hidden path="id"/>
+            <table>
+                <tr>
+                    <td> <label> User Id</label></td>
+                    <td> <input type="text" id="userid"/></td>
+                </tr>
+                <tr>
+                    <td> <label>Book</label> </td>
+                    <td> <input type="text" id="bookid"/></td>
+                </tr>
+
+
+                    <td><input type="submit" value="Save Data" class="save"/></td>
+                </tr>
+
+
+            </table>
+        </form>
+</div>
+</html>

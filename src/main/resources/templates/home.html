@@ -1,0 +1,73 @@
+<html xmlns:form="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+   <link rel="stylesheet"
+         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+   <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <title>Home Page </title>
+</head>
+<body style="background-color:rgb(	173,216,230);">
+<div >
+    <div align="right">
+        <br>
+        <form  gn="right"  name="logoutForm" th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout" onclick="if(!(confirm('You choose logging out are you sure?'))) return false" class="btn btn-danger"/>
+        </form>
+    </div>
+    <br>
+    <br>
+
+    <h1 align="center"  >Welcome to the SAI KUMAR BOOK STORE<h2 align="right"><sub>-where your search for books  is quenched</sub></h2></h1>
+
+<div sec:authorize="isAuthenticated()">
+
+
+    <!-- div only for user role -->
+    <div sec:authorize="hasRole('ROLE_USER')">
+      <br/>
+
+      <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
+         <table>
+            <thead>
+            <th ></th>
+            </thead>
+            <tbody>
+            <tr ><td style="text-align: center"><button type="button" class="btn btn-success" style="margin: 3px"><a th:href="@{/user/update}" style="color: white;text-decoration: none;">Update Data</a></button></td></tr>
+            <tr>
+                <td> <br>
+                </td>
+            </tr>
+            <tr ><td style="text-align: center"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/book/listUser}" style="color: white;text-decoration: none;">Books List</a></button></td></tr>
+
+            </tbody>
+         </table>
+      </div>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+
+        <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
+            <table>
+                <thead>
+                <th ></th>
+                </thead>
+                <tbody>
+                <tr ><td style="text-align: center"><button type="button" class="btn btn-success" style="margin: 3px"><a th:href="@{/user/update}" style="color: white;text-decoration: none;">Update Data</a></button></td></tr>
+               <tr>
+                   <td> <br>
+                   </td>
+               </tr>
+                <tr ><td style="text-align: center"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/book/list}" style="color: white;text-decoration: none;">Books List</a></button></td></tr>
+
+                </tbody>
+            </table>
+        </div>
+
+</div>
+</div>
+
+      </body>
+</html>

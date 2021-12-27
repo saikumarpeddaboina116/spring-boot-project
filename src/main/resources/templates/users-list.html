@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Employee Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Employee Directory</h3>
+    <hr>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+
+            <th>Username</th>
+            <th>Password</th>
+            <th>Enabled</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+
+
+        <tr th:each="tempEmployee : ${user}">
+
+
+            <td th:text="${tempEmployee.username}"></td>
+            <td th:text="${tempEmployee.password}"></td>
+            <td th:text="${tempEmployee.enabled}"></td>
+            <td th:text="${tempEmployee.email}"></td>
+            <td th:text="${tempEmployee.phoneNumber}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+    <tr ><td style="text-align: center"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/home}" style="color: white;text-decoration: none;">Home</a></button></td></tr>
+</div>
+
+</body>
+</html>

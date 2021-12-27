@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+    <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Books List</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Books Details</h3>
+    <hr>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+
+            <th>Book Name</th>
+            <th>Price</th>
+            <th>Book Copies</th>
+            <th>Order</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+
+        <tr th:each="temp : ${book}">
+
+
+
+            <td th:text="${temp.title}"></td>
+            <td th:text="${temp.price}"></td>
+            <td th:text="${temp.noOfCopies}"></td>
+           <td ><form action="#" th:action="@{/user/order}" method="POST">
+
+                <input type="hidden" name="bookId" th:value="${temp.id}" />
+                <button type="submit" class="btn btn-success">Order Book</button>
+
+            </form>
+
+        </tr>
+        </tbody>
+    </table>
+    <tr ><td style="text-align: center"><button type="button" class="btn btn-success" style="margin: 2px"><a th:href="@{/user/ordersList}" style="color: white;text-decoration: none;">Order List</a></button></td></tr>
+    <br>
+    <br>
+        <tr ><td style="text-align: right"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/home}" style="color: white;text-decoration: none;">Go  Home</a></button></td></tr>
+
+
+</div>
+
+</body>
+</html>
