@@ -1,5 +1,6 @@
 package com.bookstore.bookstore.Entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Setter
 @Getter
-
+@AllArgsConstructor
 public class OrderDetails {
     @Id
     @Column(name="id")
