@@ -20,17 +20,26 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+public
 class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
+
+    private  UserService userService;
+
     private OrderService orderService;
-    @Autowired
+
     private BookService bookService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    public UserController(UserService userService, OrderService orderService, BookService bookService)
+    {
+        this.orderService=orderService;
+        this.userService=userService;
+        this.bookService=bookService;
+    }
+
 
     /*  @GetMapping("/register")
     @Transactional

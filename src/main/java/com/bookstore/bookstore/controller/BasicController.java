@@ -34,6 +34,20 @@ public class BasicController {
     public String forgot(Model theModel) {
         return "access-denied";
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("/forgot")
     public String accessDenied(Model theModel) {
         return "forgot-password";
@@ -49,9 +63,9 @@ public class BasicController {
         }
         else
         {
-            UserController userController=new
-                    UserController();
-            userController.updateForgot(username,model);
+          //  UserController userController=new
+           //         UserController();
+          //  userController.updateForgot(username,model);
             return "redirect:/loginPage";
         }
 
