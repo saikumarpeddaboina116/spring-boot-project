@@ -4,16 +4,17 @@ import com.bookstore.bookstore.Entity.Authority;
 import com.bookstore.bookstore.Entity.Book;
 import com.bookstore.bookstore.Entity.OrderDetails;
 import com.bookstore.bookstore.Entity.User;
-import com.bookstore.bookstore.inter.BookService;
-import com.bookstore.bookstore.inter.OrderService;
-import com.bookstore.bookstore.inter.UserService;
+import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.BookServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
+
+import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,37 +23,25 @@ import java.util.List;
 @RequestMapping("/user")
 public
 class UserController {
+    private final AuthorityServiceJPA authorityServiceJPA;
+    private final OrderServiceJPA orderServiceJPA;
 
+    private  final BookServiceJPA bookServiceJPA;
 
-    private  UserService userService;
-
-    private OrderService orderService;
-
-    private BookService bookService;
-
+    private final UserServiceJPA userServiceJPA;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    public UserController(UserService userService, OrderService orderService, BookService bookService)
+    public UserController(AuthorityServiceJPA authorityServiceJPA, OrderServiceJPA orderService,
+                          BookServiceJPA bookServiceJPA, UserServiceJPA userServiceJPA)
     {
-        this.orderService=orderService;
-        this.userService=userService;
-        this.bookService=bookService;
+        this.authorityServiceJPA = authorityServiceJPA;
+        this.orderServiceJPA=orderService;
+        this.bookServiceJPA = bookServiceJPA;
+        this.userServiceJPA=userServiceJPA;
     }
 
-
-    /*  @GetMapping("/register")
-    @Transactional
-    public String addUser(Model theModel)
-    {
-        User theUser=new User();
-        theUser.setId(0);
-
-        theModel.addAttribute("user",theUser);
-        return "user-add";
-    }
-*/
-  @GetMapping("/add")
+    @GetMapping("/add")
   @Transactional
   public String addUser(Model model)
   {
@@ -66,7 +55,7 @@ class UserController {
     @Transactional
     public String findUser(Model model)
     {
-         List<User> list=userService.getAll();
+         List<User> list=userServiceJPA.findAll();
          model.addAttribute("user",list);
          return "users-list";
     }
@@ -82,7 +71,7 @@ class UserController {
         System.out.println(id);
         order.setUsername(username);
         model.addAttribute("order",order);
-       orderService.save(order);
+        orderServiceJPA.save(order);
         return "redirect:/user/ordersList";
     }
     @PostMapping("/save")
@@ -99,10 +88,8 @@ class UserController {
         Authority auth=new Authority();
         auth.setAuthority(authority);
         auth.setUsername(username);
-
-
-        userService.save(theUser);
-        userService.saveRole(auth);
+        userServiceJPA.save(theUser);
+        authorityServiceJPA.save(auth);
 
         return "fancy-login";
     }
@@ -110,7 +97,7 @@ class UserController {
     @Transactional
     public String find(@PathVariable String username,Model model)
     {
-        User user= userService.getUser(username);
+        User user= userServiceJPA.findById(username);
         model.addAttribute("user",user);
         return "users-list";
     }
@@ -119,25 +106,28 @@ class UserController {
    public String getOrder( Principal currentUser,Model theModel) {
        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
      String username=currentUser.getName();
+       System.out.println(username);
 //       System.out.println("In the Order List");
 //       System.out.println(username);
      //List<OrderDetails> order=orderService.findAll();
        List<Book> bookList=new ArrayList<>();
-       List<OrderDetails> orders=userService.getOrders(username);
+       List<OrderDetails> orders=orderServiceJPA.findByUsername(username);
        for(OrderDetails o:orders)
        {
            System.out.println("*******************************************");
+           System.out.println(o.getUsername());
            System.out.println(o.getBookId());
 
-           bookList.add(bookService.getBook(o.getBookId()));
+           bookList.add(bookServiceJPA.findById(o.getBookId()));
        }
        for(Book o:bookList)
        {
            System.out.println("5555555555555555555555555");
-        //   System.out.println(o.getTitle());
+         System.out.println(o.getTitle());
 
        //    bookList.add(bookService.getBook(o.getBookId()));
        }
+
        System.out.println(orders.toString());
       theModel.addAttribute("book",bookList);
 
@@ -162,37 +152,27 @@ class UserController {
         return "redirect/user/order-list";
     }
     */
-   @GetMapping("/updateForgot")
-   public  String updateForgot(String username,Model model)
-   {
-       System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-       System.out.println(username);
-       User user=userService.getUser(username);
-       System.out.println("000000000000000000000000000000000000000000000");
-       System.out.println(user.getUsername());
-       System.out.println(user.getPhoneNumber());
-       //user.setEnabled(1);
-       model.addAttribute("user",user);
-       return "user-update";
-   }
+
 @GetMapping("/update")
     public  String updateForm(Principal currentUser, Model model)
 {
     System.out.println("999999999999999999999999999999999999999999");
     System.out.println(currentUser.getName());
-    User user=userService.getUser(currentUser.getName());
+    User user=userServiceJPA.findById(currentUser.getName());
   //user.setEnabled(1);
     model.addAttribute("user",user);
     return "user-update";
 }
     @PostMapping("/deleteOrder")
     @Transactional
-    public  String updateForm(@RequestParam("bookId") int id,Model model,Principal currentUser)
+    public  String updateForm(@RequestParam("bookId") int id,Principal currentUser)
     {
         String username=currentUser.getName();
-        userService.deleteOrder(username,id);
+        System.out.println(id);
+        orderServiceJPA.deleteByUsername(username,id);
         System.out.println("======================================");
         System.out.println(username+" "+ id);
+
         return "redirect:/user/ordersList";
     }/*
     @PostMapping("/saveUser")

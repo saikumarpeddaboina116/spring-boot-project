@@ -2,9 +2,9 @@ package com.bookstore.bookstore.controller;
 
 import com.bookstore.bookstore.Entity.Book;
 
-import com.bookstore.bookstore.inter.BookService;
-import com.bookstore.bookstore.inter.OrderService;
-import com.bookstore.bookstore.inter.UserService;
+import com.bookstore.bookstore.ServiceJPA.BookServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +17,18 @@ import java.util.List;
 @Controller
 @RequestMapping("/book")
 public class BookController {
+
+    private final BookServiceJPA bookService;
+    private final OrderServiceJPA orderServiceJPA;
+
+    private final UserServiceJPA userService;
     @Autowired
-    private BookService bookService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private OrderService orderService;
+    public BookController(BookServiceJPA bookService, OrderServiceJPA orderServiceJPA, UserServiceJPA userService) {
+        this.bookService = bookService;
+        this.orderServiceJPA = orderServiceJPA;
+        this.userService = userService;
+    }
+
 
     @GetMapping("/add")
     @Transactional
@@ -36,7 +42,7 @@ public class BookController {
     @Transactional
     public String findUser(Model model)
     {
-        List<Book> list=bookService.getBooks();
+        List<Book> list=bookService.findAll();
         model.addAttribute("book",list);
         return "books-list";
     }
@@ -44,7 +50,7 @@ public class BookController {
     @Transactional
     public String getList(Model model)
     {
-        List<Book> list=bookService.getBooks();
+        List<Book> list=bookService.findAll();
         model.addAttribute("book",list);
         return "books-list-for-user";
     }
@@ -70,14 +76,14 @@ public class BookController {
     @PostMapping("/save")
     @Transactional
     public String saveUser(@ModelAttribute("book") Book book) {
-        bookService.saveBook(book);
+        bookService.save(book);
         return "redirect:/book/list";
     }
     @GetMapping("/find/{id}")
     @Transactional
     public String findBook(@PathVariable int id,Model model)
     {
-       Book book = bookService.getBook(id);
+       Book book = bookService.findById(id);
         model.addAttribute("book",book);
         return "books-list";
     }
@@ -135,7 +141,7 @@ public class BookController {
     {
         System.out.println("======================================");
         System.out.println("Id "+id);
-  Book book=bookService.getBook(id);
+  Book book=bookService.findById(id);
   model.addAttribute("book",book);
         return "book-update";
     }
@@ -145,9 +151,11 @@ public class BookController {
     {
         System.out.println("=======================================================");
         System.out.println(id);
-        userService.deleteOrderAdmin(currentUser.getName(), id);
-        bookService.delete(id);
+       // userService.deleteOrderAdmin(currentUser.getName(), id);
+       // System.out.println(id);
 
+       orderServiceJPA.deleteByBookId(id);
+        bookService.deleteById(id);
         return "redirect:/book/list";
     }
 }

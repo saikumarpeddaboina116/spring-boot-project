@@ -33,10 +33,8 @@
         <td th:text="${temp.price}" ></td>
 
         <td><form action="#" th:action="@{/user/deleteOrder}" method="POST">
-
             <input type="hidden" name="bookId" th:value="${temp.id}" />
             <button type="submit" onclick="if(!(confirm('You are deleting your order ?'))) return false" class="btn btn-danger">Delete Order</button>
-
         </form>
     </tr>
     <tr ><td style="text-align: left"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/book/listUser}" style="color: white;text-decoration: none;">Books List</a></button></td></tr>

@@ -2,7 +2,9 @@ package com.bookstore.bookstore.controller;
 
 import com.bookstore.bookstore.Entity.Authority;
 import com.bookstore.bookstore.Entity.User;
-import com.bookstore.bookstore.inter.UserService;
+import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,9 @@ import java.security.Principal;
 @Controller
 public class BasicController {
     @Autowired
-    private UserService userService;
+    private UserServiceJPA userService;
+    @Autowired
+    private AuthorityServiceJPA authorityServiceJPA;
 
     @GetMapping("/loginPage")
     public String login(Model theModel) {
@@ -48,28 +52,6 @@ public class BasicController {
 
 
 
-    @GetMapping("/forgot")
-    public String accessDenied(Model theModel) {
-        return "forgot-password";
-    }
-    @PostMapping("/check")
-    public String check(@RequestParam("username") String username,@RequestParam("phone") Long phone,Model model)
-    {
-        boolean res=userService.checkRes(username,phone);
-        if (res==false) {
-            System.out.println("Wrong Username or phone");
-            return "redirect:/loginPage";
-
-        }
-        else
-        {
-          //  UserController userController=new
-           //         UserController();
-          //  userController.updateForgot(username,model);
-            return "redirect:/loginPage";
-        }
-
-    }
 
 
     @GetMapping("/setrole")
@@ -84,13 +66,13 @@ public class BasicController {
         //user.setEnabled(1);
 
         model.addAttribute("authority", authority);
-        userService.saveRole(authority);
+        authorityServiceJPA.save(authority);
         return "redirect:/loginPage";
     }
     @PostMapping("/saverole")
     @Transactional
     public String saveUser(@ModelAttribute("authority") Authority theUser) {
-        userService.saveRole(theUser);
+        authorityServiceJPA.save(theUser);
         return "/home";
     }
 }

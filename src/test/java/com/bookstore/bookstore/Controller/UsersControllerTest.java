@@ -2,27 +2,22 @@ package com.bookstore.bookstore.Controller;
 
 import com.bookstore.bookstore.Entity.OrderDetails;
 import com.bookstore.bookstore.Entity.User;
+import com.bookstore.bookstore.Repository.BookRepository;
+import com.bookstore.bookstore.Repository.OrderDAORepo;
+import com.bookstore.bookstore.Repository.UserRepository;
+import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.BookServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
+import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
 import com.bookstore.bookstore.controller.UserController;
-import com.bookstore.bookstore.inter.*;
-import com.bookstore.bookstore.service.UserServiceImpl;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-
-import java.util.*;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,13 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
+
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,23 +39,37 @@ public class UsersControllerTest {
     private MockMvc mockMvc;
 
     UsersControllerTest usersControllerTest;
+
     @Autowired
-    private UserService userService;
+    private BookServiceJPA bookService;
     @Autowired
-    private BookService bookService;
+    private UserRepository userDAO;
     @Autowired
-    private UserDAO userDAO;
+    private OrderServiceJPA orderService;
     @Autowired
-    private OrderService orderService;
-    @Autowired
-    private BookDAO bookDAO;
+    private BookRepository bookDAO;
     @Autowired
     private OrderDAORepo orderDAORepo;
+    @Autowired
+    private UserServiceJPA userServiceJPA;
+
+    @Autowired
+    private final AuthorityServiceJPA authorityServiceJPA;
+
+    public UsersControllerTest(BookServiceJPA bookService, UserRepository userDAO, OrderServiceJPA orderService, BookRepository bookDAO, OrderDAORepo orderDAORepo, UserServiceJPA userServiceJPA, AuthorityServiceJPA authorityServiceJPA) {
+        this.bookService = bookService;
+        this.userDAO = userDAO;
+        this.orderService = orderService;
+        this.bookDAO = bookDAO;
+        this.orderDAORepo = orderDAORepo;
+        this.userServiceJPA = userServiceJPA;
+        this.authorityServiceJPA = authorityServiceJPA;
+    }
 
 
     @BeforeEach
     void setup() {
-        UserController userController = new UserController(userService,orderService,bookService);
+        UserController userController = new UserController(authorityServiceJPA, orderService,bookService,userServiceJPA);
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
@@ -98,19 +103,20 @@ User user=null;
                 .andExpect(model().attribute("user",user))
                 .andExpect(view().name("/users-add"));
     }*/
- /*   @Test
-    void save_addUser() throws Exception {
-
-        this.mockMvc.perform(post("/user/save")
-                        .param("username", "Zemoso")
-                        .param("password", "abcdef@12345")
-                        .param("enabled", String.valueOf(1))
-                        .param("email", "saikumarp128uqi@gmail.com")
-                        .sessionAttr("user", new User()))
-                .andExpect(status().isMovedTemporarily())
-                .andExpect(view().name("fancy-login"));
-
-    }*/
+//    @Test
+//    void save_addUser() throws Exception {
+//
+//        this.mockMvc.perform(post("/user/save")
+//                        .param("username", "Zemoso")
+//                        .param("password", "")
+//                        .param("enabled", String.valueOf(1))
+//                        .param("email", "saikumarp128uqi@gmail.com")
+//                      //  .param("phoneNumber",1234567890L)
+//                        .sessionAttr("user", new User()))
+//                .andExpect(status().isMovedTemporarily())
+//                .andExpect(view().name("fancy-login"));
+//
+//    }
 
     @Test
     void saveNewUser() throws Exception {
