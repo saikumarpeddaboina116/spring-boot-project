@@ -2,18 +2,16 @@ package com.bookstore.bookstore.controller;
 
 import com.bookstore.bookstore.Entity.Authority;
 import com.bookstore.bookstore.Entity.User;
+import com.bookstore.bookstore.Exception.MyException;
 import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
-import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
 import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -31,12 +29,18 @@ public class BasicController {
 
     @GetMapping("/home")
     public String home() {
+
         return "home";
     }
 
+    @GetMapping("/error")
+    public String error() {
+        return "error-page";
+    }
+
     @GetMapping("/access-denied")
-    public String forgot(Model theModel) {
-        return "access-denied";
+    public String accessDenied() {
+        throw new MyException("Access Denied");
     }
 
 

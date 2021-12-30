@@ -20,7 +20,7 @@
 <tr>
     <th >Book Name</th>
     <th>Book Price</th>
-    <th>Delete Order</th>
+    <th>Delete</th>
 </tr>
 
 
@@ -29,7 +29,8 @@
     <tbody>
 
     <tr th:each="temp : ${book}">
-        <td th:text="${temp.title}" ></td>
+
+    <td th:text="${temp.title}" ></td>
         <td th:text="${temp.price}" ></td>
 
         <td><form action="#" th:action="@{/user/deleteOrder}" method="POST">
