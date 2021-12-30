@@ -1,6 +1,5 @@
 package com.bookstore.bookstore.ServiceJPA;
 
-import com.bookstore.bookstore.Entity.Book;
 import com.bookstore.bookstore.Entity.User;
 import com.bookstore.bookstore.Exception.MyException;
 import com.bookstore.bookstore.Repository.UserRepository;
@@ -15,6 +14,7 @@ public class UserServiceImpl implements UserServiceJPA{
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
 
     @Override
     public void save(User theUser) {

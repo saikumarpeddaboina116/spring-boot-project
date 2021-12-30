@@ -1,7 +1,6 @@
 package com.bookstore.bookstore.controller;
 
 import com.bookstore.bookstore.Entity.Book;
-
 import com.bookstore.bookstore.ServiceJPA.BookServiceJPA;
 import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
 import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
@@ -73,18 +72,18 @@ public class BookController {
 //        bookService.saveOrder(order);
 //        return "/home";
 //    }
-    @PostMapping("/save")
-    @Transactional
-    public String saveUser(@ModelAttribute("book") Book book) {
-        bookService.save(book);
-        return "redirect:/book/list";
-    }
+@PostMapping("/save")
+@Transactional
+public String saveBook(@ModelAttribute("book") Book book) {
+    bookService.save(book);
+    return "redirect:/book/list";
+}
+
     @GetMapping("/find/{id}")
     @Transactional
-    public String findBook(@PathVariable int id,Model model)
-    {
-       Book book = bookService.findById(id);
-        model.addAttribute("book",book);
+    public String findBook(@PathVariable int id, Model model) {
+        Book book = bookService.findById(id);
+        model.addAttribute("book", book);
         return "books-list";
     }
    /* @PostMapping("/addbook")
