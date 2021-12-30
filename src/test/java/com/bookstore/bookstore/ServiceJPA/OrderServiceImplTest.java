@@ -45,7 +45,7 @@ class OrderServiceImplTest {
         OrderDetails orderDetails = new OrderDetails(1, 1, "saikumar");
         List<OrderDetails> order = List.of(orderDetails);
 //        OrderDetails order =orderDetails;
-        when(orderDAORepo.findByUsername("saikumar")).thenReturn(order);
+        when(orderServiceJPA.findByUsername("saikumar")).thenReturn(order);
         assertEquals(orderDAORepo.findByUsername("saikumar"), order);
     }
 

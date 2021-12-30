@@ -1,8 +1,12 @@
 package com.bookstore.bookstore.controller;
 
+import com.bookstore.bookstore.Repository.AuthorityDAORepo;
+import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.NestedServletException;
@@ -18,6 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BasicControllerTest {
     BasicController basicController;
     private MockMvc mockMvc;
+    @Autowired
+    private AuthorityServiceJPA authorityServiceJPA;
+    @MockBean
+    private AuthorityDAORepo authorityDAORepo;
 
     @BeforeEach
     public void setup() {
@@ -47,10 +55,18 @@ class BasicControllerTest {
     }
 
     @Test
+    void homePageTest() throws Exception {
+        mockMvc.perform(get("/home"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("home-page"));
+    }
+
+    @Test
     void errorPageTest() throws Exception {
         mockMvc.perform(get("/error"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error-page"));
     }
+
 
 }
