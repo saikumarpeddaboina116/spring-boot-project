@@ -87,8 +87,4 @@ class BookControllerTest {
                 .andExpect(view().name("books-list"));
 
     }
-
-    @Test
-    void deleteBook() {
-    }
 }
