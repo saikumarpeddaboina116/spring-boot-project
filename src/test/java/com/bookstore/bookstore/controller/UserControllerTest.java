@@ -39,7 +39,7 @@ class UserControllerTest {
 
 
     @Test
-    void testOrder() {
+    void testOrderTest() {
         User user1 = new User("arjun", "SaiArjun@123", 1,
                 "saikumarp612@gmail.com", 1234567891L);
         User user2 = new User("asai", "SaiArjun@123",
@@ -72,7 +72,7 @@ class UserControllerTest {
     }
 
     @Test
-    void testFind() {
+    void testFindT() {
         User user = new User("arjun", "SaiArjun@123", 1,
                 "saikumarp612@gmail.com", 1234567891L);
         Optional<User> artistById = Optional.of(user);
@@ -93,7 +93,4 @@ class UserControllerTest {
         when(userRepository.findById("arjun")).thenReturn(artistById);
     }
 
-    @Test
-    void testUpdateForm2() {
-    }
 }
