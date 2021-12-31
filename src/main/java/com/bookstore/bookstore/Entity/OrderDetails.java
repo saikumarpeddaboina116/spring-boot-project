@@ -22,12 +22,6 @@ public class OrderDetails {
     int bookId;
     @Column(name="username")
     String username;
-//    @ManyToOne(cascade = {CascadeType.PERSIST,
-//            CascadeType.MERGE,
-//            CascadeType.DETACH,
-//            CascadeType.REFRESH})
-//    @JoinColumn(name = "")
-//    private User user;
 
 
 }

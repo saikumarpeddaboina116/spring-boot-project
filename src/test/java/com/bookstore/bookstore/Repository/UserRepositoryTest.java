@@ -32,11 +32,19 @@ class UserRepositoryTest {
     @Test
     @Order(1)
     @Rollback(value = false)
-    public void save() {
+    void save() {
         User user = new User("arjun", "SaiArjun@123", 1, "saikumarp612@gmail.com", 1234567891L);
         userRepository.save(user);
 
         verify(userRepository, times(1)).save(user);
     }
 
+    @Test
+    void testFindById() {
+        User user = new User("arjun", "SaiArjun@123", 1, "saikumarp612@gmail.com", 1234567891L);
+        String username = "arjun";
+        Optional<User> user1 = userRepository.findById(username);
+        verify(userRepository, times(1)).findById(username);
+
+    }
 }
