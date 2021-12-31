@@ -19,7 +19,6 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -45,29 +44,7 @@ class UserControllerTest {
     }
 
 
-    @Test
-    void testSaveUser() throws Exception {
-        User user = new User("arjun", "SaiArjun@123",
-                1, "saikumarp612@gmail.com", 1234567891L);
-        System.out.println(user.getPhoneNumber());
-        userServiceJPA.save(user);
-        // userRepository.save(user);
-        try {
-            this.mockMvc.perform(post("/user/save")
-                            .param("username", "arjun")
-                            .param("password", "SaiArjun@123")
-                            .param("enabled", "1")
-                            .param("email", "saikumarp612@gmail.com")
-                            .param("phoneNumber", "1234567891L")
-                            .sessionAttr("user", new User()))
-                    .andExpect(status().isMovedTemporarily())
-                    .andExpect(view().name("redirect:/fancy-login"))
-                    .andExpect(redirectedUrl("/fancy-login"));
-        } catch (Exception e) {
-            System.out.println("Process finished with exit code 0");
-        }
 
-    }
 
     @Test
     void findUser() throws Exception {
@@ -97,7 +74,14 @@ class UserControllerTest {
     }
 
     @Test
-    void find() {
+    void find() throws Exception {
+        User user = new User("arjun", "SaiArjun@123", 1,
+                "saikumarp612@gmail.com", 1234567891L);
+        //  userServiceJPA.save(user);
+        when(userServiceJPA.findById("arjun")).thenReturn(user);
+        mockMvc.perform(get("/user/find/'arjun'"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("users-list"));
     }
 
     @Test
