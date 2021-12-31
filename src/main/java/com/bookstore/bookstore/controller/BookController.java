@@ -45,13 +45,14 @@ public class BookController {
         model.addAttribute("book",list);
         return "books-list";
     }
-    @GetMapping("/listUser")
+
     @Transactional
-    public String getList(Model model)
-    {
-        List<Book> list=bookService.findAll();
-        model.addAttribute("book",list);
-        return "books-list-for-user";
+    @GetMapping("/listUser")
+
+    public String getList(Model model) {
+        List<Book> book = bookService.findAll();
+        model.addAttribute("book", book);
+        return "books/books-list-for-user";
     }
 //    @GetMapping("/listorders")
 //    @Transactional
