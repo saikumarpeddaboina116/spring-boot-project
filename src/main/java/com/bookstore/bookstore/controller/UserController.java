@@ -105,10 +105,7 @@ class UserController {
        List<OrderDetails> orders=orderServiceJPA.findByUsername(username);
        for(OrderDetails o:orders)
        {
-           System.out.println(o.getUsername());
-           System.out.println(o.getBookId());
-
-           bookList.add(bookServiceJPA.findById(o.getBookId()));
+        bookList.add(bookServiceJPA.findById(o.getBookId()));
        }
       theModel.addAttribute("book",bookList);
        return "order-list";
@@ -116,19 +113,17 @@ class UserController {
 
 
     @GetMapping("/update")
-    public  String updateForm(Principal currentUser, Model model)
-{
-    User user=userServiceJPA.findById(currentUser.getName());
-    model.addAttribute("user",user);
-    return "user-update";
-}
+    public String updateForm(Principal currentUser, Model model) {
+        User user = userServiceJPA.findById(currentUser.getName());
+        model.addAttribute("user", user);
+        return "user-update";
+    }
+
     @PostMapping("/deleteOrder")
     @Transactional
-    public  String updateForm(@RequestParam("bookId") int id,Principal currentUser)
-    {
-        String username=currentUser.getName();
-        System.out.println(id);
-        orderServiceJPA.deleteByUsername(username,id);
+    public String deleteOrder(@RequestParam("bookId") int id, Principal currentUser) {
+        String username = currentUser.getName();
+        orderServiceJPA.deleteByUsername(username, id);
         return "redirect:/user/ordersList";
     }
 

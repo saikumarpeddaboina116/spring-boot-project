@@ -1,7 +1,10 @@
 package com.bookstore.bookstore.controller;
 
+import com.bookstore.bookstore.Entity.Book;
+import com.bookstore.bookstore.Entity.OrderDetails;
 import com.bookstore.bookstore.Entity.User;
 import com.bookstore.bookstore.Repository.UserRepository;
+import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
 import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 //@WebMvcTest(BookController.class)
@@ -30,6 +34,8 @@ class UserControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    OrderServiceJPA orderServiceJPA;
     @MockBean
     private UserServiceJPA userServiceJPA;
 
@@ -42,10 +48,6 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("user-add"));
     }
-
-
-
-
     @Test
     void findUser() throws Exception {
         User user2 = new User("arjun", "SaiArjun@123", 1,
@@ -63,16 +65,20 @@ class UserControllerTest {
     @Test
     void order() {
     }
-
     @Test
     void saveUser() throws Exception {
         User user = new User("arjun", "SaiArjun@123", 1,
                 "saikumarp612@gmail.com", 1234567891L);
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/save").param("book"
-                        , "username=arjun&password=SaiArjun@123&enabled=1&email=saikumarp612@gmail.com&phoneNumber=1234567891L"))
-                .andExpect(MockMvcResultMatchers.view().name("error-page"));
-    }
+        userServiceJPA.save(user);
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/save").param("username", "arjun")
 
+                        .param("password", "SaiArjun@123"))
+//                .param("enabled","1")
+//                .param("email","saikumarp612@gmail.com")
+//                .param("phoneNumber","1234567891L"))
+                // .andExpect(model().attribute("user", hasProperty())
+                .andExpect(MockMvcResultMatchers.view().name("fancy-login"));
+    }
     @Test
     void find() throws Exception {
         User user = new User("arjun", "SaiArjun@123", 1,
@@ -85,6 +91,35 @@ class UserControllerTest {
     }
 
     @Test
+    void orderTest() throws Exception {
+    /*   OrderDetails order=new OrderDetails(1,1,"arjun");
+        orderServiceJPA.save(order);
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/user/order")
+                .param("bookId","1"))
+                .andExpect(model().attribute("order", hasProperty("id", is("1"))))
+                .andExpect(view().name("error-page"));*/
+    }
+
+    @Test
+    void testDeleteOrder() throws Exception {
+        User user = new User("arjun", "SaiArjun@123", 1,
+                "saikumarp612@gmail.com", 1234567891L);
+        Book book1 = new Book(1, "HARRYPOTTER", 200.5, 123);
+        OrderDetails orderDetails = new OrderDetails(1, 1, "arjun");
+        orderServiceJPA.save(orderDetails);
+        orderServiceJPA.deleteByUsername("arjun", 1);
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/deleteOrder")
+                        .param("bookId", "1"))
+                .andExpect(MockMvcResultMatchers.view().name("error-page"));
+    }
+
+    @Test
     void getOrder() {
     }
+
+    @Test
+    void updateForm() {
+    }
+
+
 }

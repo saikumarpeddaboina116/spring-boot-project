@@ -63,14 +63,6 @@ public String saveBook(@ModelAttribute("book") Book book) {
         return "books-list";
     }
 
-   @GetMapping("/deleteGetId")
-   public  String deleteBook(Model model)
-   {
-       Book book=new Book();
-
-       model.addAttribute("book",book);
-       return "delete-book-id";
-   }
     @PostMapping("/update")
     @Transactional
     public  String updateForm(@RequestParam("bookId") int id,Model model)
