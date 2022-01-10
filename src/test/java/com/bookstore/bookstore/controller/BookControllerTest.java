@@ -1,9 +1,9 @@
 package com.bookstore.bookstore.controller;
 
-import com.bookstore.bookstore.Entity.Book;
-import com.bookstore.bookstore.Repository.BookRepository;
-import com.bookstore.bookstore.ServiceJPA.BookServiceJPA;
-import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
+import com.bookstore.bookstore.entity.Book;
+import com.bookstore.bookstore.repository.BookRepository;
+import com.bookstore.bookstore.service.BookServiceJPA;
+import com.bookstore.bookstore.service.OrderServiceJPA;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,15 +99,6 @@ class BookControllerTest {
         bookServiceJPA.deleteById(1);
         mockMvc.perform(MockMvcRequestBuilders.post("/book/delete").param("bookId", "1"))
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/book/list"));
-    }
-
-    @Test
-    void updateTest() throws Exception {
-        Book book = new Book(1, "HARRYPOTTER", 200.5, 123);
-        bookServiceJPA.findById(1);
-/*    mockMvc.perform(MockMvcRequestBuilders.post("/book/update").param("bookId","1"))
-            .andExpect(model().attribute("book",hasProperty("id",is(1))))
-            .andExpect(MockMvcResultMatchers.view().name("book-update"));*/
     }
 
 

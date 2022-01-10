@@ -1,13 +1,15 @@
 package com.bookstore.bookstore.controller;
 
-import com.bookstore.bookstore.Entity.Authority;
-import com.bookstore.bookstore.Entity.Book;
-import com.bookstore.bookstore.Entity.OrderDetails;
-import com.bookstore.bookstore.Entity.User;
-import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
-import com.bookstore.bookstore.ServiceJPA.BookServiceJPA;
-import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
-import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
+import com.bookstore.bookstore.convertor.UserConvertor;
+import com.bookstore.bookstore.dto.UserDTO;
+import com.bookstore.bookstore.entity.Authority;
+import com.bookstore.bookstore.entity.Book;
+import com.bookstore.bookstore.entity.OrderDetails;
+import com.bookstore.bookstore.entity.User;
+import com.bookstore.bookstore.service.AuthorityServiceJPA;
+import com.bookstore.bookstore.service.BookServiceJPA;
+import com.bookstore.bookstore.service.OrderServiceJPA;
+import com.bookstore.bookstore.service.UserServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -26,19 +28,26 @@ class UserController {
     private final AuthorityServiceJPA authorityServiceJPA;
     private final OrderServiceJPA orderServiceJPA;
 
-    private  final BookServiceJPA bookServiceJPA;
+    private final BookServiceJPA bookServiceJPA;
 
     private final UserServiceJPA userServiceJPA;
+    private UserConvertor userConvertor;
+
+    @Autowired
+    public void booksConvertor(UserConvertor userConvertor) {
+        this.userConvertor = userConvertor;
+    }
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     public UserController(AuthorityServiceJPA authorityServiceJPA, OrderServiceJPA orderService,
-                          BookServiceJPA bookServiceJPA, UserServiceJPA userServiceJPA)
-    {
+                          BookServiceJPA bookServiceJPA, UserServiceJPA userServiceJPA) {
         this.authorityServiceJPA = authorityServiceJPA;
-        this.orderServiceJPA=orderService;
+        this.orderServiceJPA = orderService;
         this.bookServiceJPA = bookServiceJPA;
-        this.userServiceJPA=userServiceJPA;
+        this.userServiceJPA = userServiceJPA;
     }
 
     @GetMapping("/add")
@@ -63,27 +72,28 @@ class UserController {
     @PostMapping("/order")
     @Transactional
     public String order(@RequestParam("bookId") int id,Principal currentUser,Model model) {
-        String username=currentUser.getName();
-        OrderDetails order=new OrderDetails();
+        String username = currentUser.getName();
+        OrderDetails order = new OrderDetails();
         order.setBookId(id);
         order.setUsername(username);
-        model.addAttribute("order",order);
+        model.addAttribute("order", order);
         orderServiceJPA.save(order);
         return "redirect:/user/ordersList";
     }
+
     @PostMapping("/save")
     @Transactional
-    public String saveUser(@ModelAttribute("user") User theUser,Model model,Principal currentUser
-            ,@RequestParam("username") String username) {
+    public String saveUser(@ModelAttribute("user") UserDTO theUser, Model model, Principal currentUser
+            , @RequestParam("username") String username) {
         String encodedPassword = bCryptPasswordEncoder.encode(theUser.getPassword());
         theUser.setPassword(encodedPassword);
         theUser.setEnabled(1);
-        model.addAttribute("user",theUser);
-        String authority="ROLE_USER";
-        Authority auth=new Authority();
-        auth.setAuthority(authority);
+        model.addAttribute("user", theUser);
+        String authority = "ROLE_USER";
+        Authority auth = new Authority();
+        auth.setAuth(authority);
         auth.setUsername(username);
-        userServiceJPA.save(theUser);
+        userServiceJPA.save(userConvertor.dtoToEntity(theUser));
         authorityServiceJPA.save(auth);
 
         return "fancy-login";
@@ -99,7 +109,6 @@ class UserController {
    @GetMapping("/ordersList")
    @Transactional
    public String getOrder( Principal currentUser,Model theModel) {
-       System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
      String username=currentUser.getName();
        List<Book> bookList=new ArrayList<>();
        List<OrderDetails> orders=orderServiceJPA.findByUsername(username);

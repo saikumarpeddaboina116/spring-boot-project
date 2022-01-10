@@ -1,8 +1,10 @@
 package com.bookstore.bookstore.controller;
 
-import com.bookstore.bookstore.Entity.Book;
-import com.bookstore.bookstore.ServiceJPA.BookServiceJPA;
-import com.bookstore.bookstore.ServiceJPA.OrderServiceJPA;
+import com.bookstore.bookstore.convertor.BookConvertor;
+import com.bookstore.bookstore.dto.BookDTO;
+import com.bookstore.bookstore.entity.Book;
+import com.bookstore.bookstore.service.BookServiceJPA;
+import com.bookstore.bookstore.service.OrderServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,12 @@ public class BookController {
 
     private final BookServiceJPA bookService;
     private final OrderServiceJPA orderServiceJPA;
+    private BookConvertor bookConvertor;
+
+    @Autowired
+    public void booksConvertor(BookConvertor bookConvertor) {
+        this.bookConvertor = bookConvertor;
+    }
 
     @Autowired
     public BookController(BookServiceJPA bookService, OrderServiceJPA orderServiceJPA) {
@@ -48,12 +56,13 @@ public class BookController {
         model.addAttribute("book", book);
         return "books/books-list-for-user";
     }
-@PostMapping("/save")
-@Transactional
-public String saveBook(@ModelAttribute("book") Book book) {
-    bookService.save(book);
-    return "redirect:/book/list";
-}
+
+    @PostMapping("/save")
+    @Transactional
+    public String saveBook(@ModelAttribute("book") BookDTO book) {
+        bookService.save(bookConvertor.dtoToEntity(book));
+        return "redirect:/book/list";
+    }
 
     @GetMapping("/find/{id}")
     @Transactional

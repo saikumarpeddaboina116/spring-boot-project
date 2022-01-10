@@ -1,5 +1,6 @@
 package com.bookstore.bookstore.configure;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,19 +17,29 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource securityDataSource;
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(securityDataSource).passwordEncoder(bCryptPasswordEncoder());
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        String role = "ADMIN";
         http.authorizeRequests()
-                .antMatchers("/").hasRole("USER")
-                .antMatchers("/").hasRole("ADMIN")
+                .antMatchers("/").hasAnyRole("USER", role)
+                .antMatchers("/user/**").hasAnyRole("USER", role)
+                .antMatchers("/book/**").hasAnyRole("USER", role)
                     .and()
                     .formLogin().loginPage("/loginPage")
                     .defaultSuccessUrl("/home",true)

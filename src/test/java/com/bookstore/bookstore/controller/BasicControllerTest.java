@@ -1,7 +1,7 @@
 package com.bookstore.bookstore.controller;
 
-import com.bookstore.bookstore.Repository.AuthorityDAORepo;
-import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
+import com.bookstore.bookstore.repository.AuthorityDAORepo;
+import com.bookstore.bookstore.service.AuthorityServiceJPA;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ class BasicControllerTest {
     void accessDeniedPageTest() {
         Exception exception = assertThrows(NestedServletException.class, () -> mockMvc.perform(get("/access-denied"))
                 .andExpect(status().isNotFound()));
-        String expectedMessage = "Request processing failed; nested exception is com.bookstore.bookstore.Exception.MyException: Access Denied";
+        String expectedMessage = "Request processing failed; nested exception is com.bookstore.bookstore.exception.MyException: Access Denied";
         String actualMessage = exception.getMessage();
         assertEquals(expectedMessage, actualMessage);
     }

@@ -1,8 +1,8 @@
 package com.bookstore.bookstore.controller;
 
-import com.bookstore.bookstore.Exception.MyException;
-import com.bookstore.bookstore.ServiceJPA.AuthorityServiceJPA;
-import com.bookstore.bookstore.ServiceJPA.UserServiceJPA;
+import com.bookstore.bookstore.exception.MyException;
+import com.bookstore.bookstore.service.AuthorityServiceJPA;
+import com.bookstore.bookstore.service.UserServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
